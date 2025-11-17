@@ -1,6 +1,6 @@
 // ========== 설정 ==========
 const CONFIG = {
-    GAME_TIME: 180,
+    GAME_TIME: 120,
     COOKING_TIME: 3,
     COOKED_TIME: 3,
     REQUEST_DURATION: 4,

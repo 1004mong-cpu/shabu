@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>최애에게 훠궈를 먹인다</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameWrapper">
+        <div id="gameContainer">
+            <!-- 캐릭터 설정 모달 -->
+            <div id="setupModal" class="modal active">
+                <div class="modal-content">
+                    <h2>최애 캐릭터 설정</h2>
+                    <div class="setup-form">
+                        <div class="form-group">
+                            <label>기본 표정 이미지</label>
+                            <input type="file" id="normalImage" accept="image/*">
+                            <div class="preview" id="normalPreview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>웃는 표정 이미지</label>
+                            <input type="file" id="happyImage" accept="image/*">
+                            <div class="preview" id="happyPreview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>화난 표정 이미지</label>
+                            <input type="file" id="angryImage" accept="image/*">
+                            <div class="preview" id="angryPreview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>기쁠 때 대사 (최대 24자)</label>
+                            <input type="text" id="happyText" maxlength="24" placeholder="예: 맛있어!">
+                        </div>
+                        <div class="form-group">
+                            <label>화났을 때 대사 (최대 24자)</label>
+                            <input type="text" id="angryText" maxlength="24" placeholder="예: 이건 아닌데...">
+                        </div>
+                        <button class="btn-start" id="startBtn">게임 시작</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 게임 화면 -->
+            <div id="gameScreen" style="display: none;">
+                <!-- 배경 -->
+                <img src="img/background.png" class="background">
+                
+                <!-- 점수 -->
+                <img src="img/heart.png" class="score-heart">
+                <div class="score-text" id="scoreText">0</div>
+                
+                <!-- 시간 게이지 -->
+                <img src="img/gadge_back.png" class="gauge-back">
+                <div class="gauge-container">
+                    <img src="img/gadge_green.png" class="gauge-green" id="timeGauge">
+                </div>
+                
+                <!-- 일시정지 버튼 -->
+                <img src="img/pause.png" class="btn-pause" id="pauseBtn">
+                
+                <!-- 캐릭터 -->
+                <img id="characterImg" class="character">
+                
+                <!-- 요청 말풍선 -->
+                <img src="img/wish.png" class="speech-bubble" id="speechBubble" style="display: none;">
+                <img id="requestFoodImg" class="request-food" style="display: none;">
+                
+                <!-- 대사 말풍선 -->
+                <img src="img/text.png" class="text-bubble" id="textBubble" style="display: none;">
+                <div class="text-content" id="textContent" style="display: none;"></div>
+                
+                <!-- 냄비 -->
+                <img src="img/pot.png" class="pot">
+                
+                <!-- 끓는 국물 -->
+                <img src="img/boil_1.png" class="boil" id="boil1">
+                <img src="img/boil_2.png" class="boil" id="boil2" style="display: none;">
+                
+                <!-- 냄비 에러 -->
+                <img src="img/error.png" class="pot-error" id="potError" style="display: none;">
+                
+                <!-- 냄비 슬롯 -->
+                <div class="pot-slot" data-slot="0" style="left: 343px; top: 847px;"></div>
+                <div class="pot-slot" data-slot="1" style="left: 343px; top: 986px;"></div>
+                <div class="pot-slot" data-slot="2" style="left: 555px; top: 847px;"></div>
+                <div class="pot-slot" data-slot="3" style="left: 555px; top: 986px;"></div>
+                
+                <!-- 재료 그릇 -->
+                <img src="img/dish_1.png" class="dish" data-food="1" style="left: 39px; top: 1299px;">
+                <img src="img/dish_2.png" class="dish" data-food="2" style="left: 379px; top: 1299px;">
+                <img src="img/dish_3.png" class="dish" data-food="3" style="left: 718px; top: 1299px;">
+                <img src="img/dish_4.png" class="dish" data-food="4" style="left: 39px; top: 1605px;">
+                <img src="img/dish_5.png" class="dish" data-food="5" style="left: 379px; top: 1605px;">
+                <img src="img/dish_6.png" class="dish" data-food="6" style="left: 718px; top: 1605px;">
+                
+                <!-- 휴지통 -->
+                <img src="img/trash_1.png" class="trash" id="trashImg">
+                
+                <!-- Ready/Go -->
+                <div class="countdown" id="countdown" style="display: none;">
+                    <img src="img/ready.png" id="readyImg" style="display: none;">
+                    <img src="img/go.png" id="goImg" style="display: none;">
+                </div>
+                
+                <!-- 하트 파티클 -->
+                <div id="heartParticles"></div>
+            </div>
+
+            <!-- 일시정지 모달 -->
+            <div id="pauseModal" class="modal">
+                <div class="modal-content">
+                    <h2>일시정지</h2>
+                    <button class="btn" id="resumeBtn">돌아가기</button>
+                    <button class="btn" id="restartFromPauseBtn">다시하기</button>
+                    <button class="btn" id="backToSetupBtn">처음으로</button>
+                </div>
+            </div>
+
+            <!-- 게임오버 모달 -->
+            <div id="gameoverModal" class="modal">
+                <img src="img/gameover.png" class="gameover-img" id="gameoverImg" style="display: none;">
+                <div class="modal-content" id="gameoverContent" style="display: none;">
+                    <h2>게임 종료</h2>
+                    <div class="final-score">Score: <span id="finalScore">0</span>점</div>
+                    <button class="btn" id="restartFromGameoverBtn">다시하기</button>
+                    <button class="btn" id="backToSetupBtn2">처음으로</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

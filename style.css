@@ -1,0 +1,409 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Malgun Gothic', sans-serif;
+    overflow: hidden;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#gameWrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gameContainer {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    transform-origin: center center;
+    overflow: hidden;
+}
+
+/* ===== 게임 화면 ===== */
+#gameScreen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+    z-index: 1;
+}
+
+/* 점수 */
+.score-heart {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    z-index: 100;
+}
+
+.score-text {
+    position: absolute;
+    left: 81px;
+    top: 12px;
+    width: 500px;
+    height: 72px;
+    font-size: 63pt;
+    color: white;
+    line-height: 72px;
+    font-weight: bold;
+    -webkit-text-stroke: 5px black;
+    z-index: 100;
+}
+
+/* 시간 게이지 */
+.gauge-back {
+    position: absolute;
+    left: 22px;
+    top: 95px;
+    z-index: 100;
+}
+
+.gauge-container {
+    position: absolute;
+    left: 22px;
+    top: 95px;
+    z-index: 101;
+    overflow: hidden;
+}
+
+.gauge-green {
+    display: block;
+    transition: none;
+}
+
+/* 일시정지 버튼 */
+.btn-pause {
+    position: absolute;
+    left: 940px;
+    top: 24px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+/* 캐릭터 */
+.character {
+    position: absolute;
+    left: 0;
+    top: 161px;
+    width: 1080px;
+    height: 600px;
+    z-index: 50;
+}
+
+/* 요청 말풍선 */
+.speech-bubble {
+    position: absolute;
+    left: 26px;
+    top: 167px;
+    z-index: 60;
+}
+
+.request-food {
+    position: absolute;
+    left: 65px;
+    top: 227px;
+    z-index: 61;
+}
+
+/* 대사 말풍선 */
+.text-bubble {
+    position: absolute;
+    left: 793px;
+    top: 170px;
+    z-index: 60;
+}
+
+.text-content {
+    position: absolute;
+    left: 818px;
+    top: 186px;
+    width: 224px;
+    height: 224px;
+    font-size: 40pt;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 61;
+    word-break: keep-all;
+}
+
+/* 냄비 */
+.pot {
+    position: absolute;
+    left: 156px;
+    top: 767px;
+    z-index: 10;
+}
+
+/* 끓는 국물 */
+.boil {
+    position: absolute;
+    left: 263px;
+    top: 848px;
+    z-index: 11;
+}
+
+/* 냄비 에러 */
+.pot-error {
+    position: absolute;
+    left: 156px;
+    top: 767px;
+    z-index: 12;
+}
+
+/* 냄비 슬롯 */
+.pot-slot {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 15;
+    pointer-events: none;
+}
+
+/* 재료 그릇 */
+.dish {
+    position: absolute;
+    z-index: 20;
+    cursor: grab;
+}
+
+.dish:active {
+    cursor: grabbing;
+}
+
+/* 휴지통 */
+.trash {
+    position: absolute;
+    left: 17px;
+    top: 1027px;
+    z-index: 20;
+}
+
+/* 재료 아이콘 (드래그 중) */
+.food-icon {
+    position: absolute;
+    z-index: 500;
+    pointer-events: none;
+}
+
+.food-icon.in-slot {
+    z-index: 16;
+    cursor: grab;
+    pointer-events: auto;
+}
+
+.food-icon.in-slot:active {
+    cursor: grabbing;
+}
+
+.food-icon.dragging {
+    z-index: 600 !important;
+    cursor: grabbing;
+}
+
+/* Ready/Go */
+.countdown {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 500;
+}
+
+.countdown img {
+    position: absolute;
+    left: 192px;
+    top: 829px;
+}
+
+/* 하트 파티클 */
+#heartParticles {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 300;
+}
+
+.heart-particle {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* ===== 모달 ===== */
+.modal {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    border: 3px solid black;
+    text-align: center;
+    max-width: 700px;
+    max-height: 1400px;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    font-size: 36pt;
+    margin-bottom: 30px;
+}
+
+/* 설정 모달 */
+.setup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 18pt;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input[type="file"],
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16pt;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+.preview {
+    margin-top: 8px;
+    width: 100%;
+    height: 120px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.btn-start {
+    width: 100%;
+    padding: 20px;
+    font-size: 28pt;
+    font-weight: bold;
+    background: #4CAF50;
+    color: white;
+    border: 3px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-start:hover {
+    background: #45a049;
+}
+
+.btn-start:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* 버튼 */
+.btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 15px auto;
+    padding: 20px;
+    font-size: 24pt;
+    background: white;
+    border: 3px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #f0f0f0;
+}
+
+/* 게임오버 */
+.gameover-img {
+    position: absolute;
+    left: 242px;
+    top: 747px;
+    z-index: 1001;
+}
+
+.final-score {
+    font-size: 36pt;
+    font-weight: bold;
+    margin: 30px 0;
+}
+
+/* 애니메이션 */
+@keyframes shake {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-10px); }
+    75% { transform: translateY(10px); }
+}
+
+.shake {
+    animation: shake 0.25s ease-in-out 4;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.blink {
+    animation: blink 0.25s ease-in-out 2;
+}

@@ -101,9 +101,17 @@ function initSetup() {
         game.character.happyText = inputs.happyText.value.trim() || '맛있어!';
         game.character.angryText = inputs.angryText.value.trim() || '이건 아닌데...';
         
-        if (!game.character.normal || !game.character.happy || !game.character.angry) {
-            alert('모든 캐릭터 이미지를 업로드해주세요!');
+        if (!game.character.normal) {
+            alert('기본 표정 이미지를 업로드해주세요!');
             return;
+        }
+        
+        // 웃는 표정, 화난 표정이 없으면 기본 표정으로 대체
+        if (!game.character.happy) {
+            game.character.happy = game.character.normal;
+        }
+        if (!game.character.angry) {
+            game.character.angry = game.character.normal;
         }
         
         $.setupModal.classList.remove('active');

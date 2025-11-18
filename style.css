@@ -108,9 +108,12 @@ body {
     position: absolute;
     left: 0;
     top: 161px;
-    width: 1080px;
+    width: auto;
     height: 600px;
+    max-width: 1080px;
     z-index: 50;
+    object-fit: contain;
+    object-position: center;
 }
 
 /* 요청 말풍선 */

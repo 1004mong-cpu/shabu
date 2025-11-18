@@ -2,8 +2,8 @@
 const CONFIG = {
     GAME_TIME: 120,
     COOKING_TIME: 3,
-    COOKED_TIME: 3,
-    REQUEST_DURATION: 4,
+    COOKED_TIME: 4,
+    REQUEST_DURATION: 5,
     SCORE_NORMAL: 5,
     SCORE_REQUEST: 10,
     BURNT_PENALTY: -5,
@@ -24,6 +24,8 @@ const game = {
     },
     slots: [null, null, null, null],
     requestedFood: null,
+    emotionTimer: null,
+    textTimer: null,
     timers: {
         game: null,
         boil: null,
@@ -525,7 +527,8 @@ function feedCharacter(icon) {
     let score = 0;
     let emotion = 'normal';
     
-    if (state === 'burnt') {
+    if (state === 'burnt' || state === 'cooking') {
+        // burnt 또는 cooking 상태 = 화남
         score = CONFIG.BURNT_PENALTY;
         emotion = 'angry';
     } else if (state === 'cooked') {
@@ -533,6 +536,19 @@ function feedCharacter(icon) {
             score = CONFIG.SCORE_REQUEST;
             emotion = 'happy';
             createHearts();
+            
+            // 말풍선 들썩이는 효과 - 애니메이션 재시작
+            $.speechBubble.classList.remove('bounce');
+            $.requestFoodImg.classList.remove('bounce');
+            // 리플로우 강제 (애니메이션 재시작)
+            void $.speechBubble.offsetWidth;
+            $.speechBubble.classList.add('bounce');
+            $.requestFoodImg.classList.add('bounce');
+            setTimeout(() => {
+                $.speechBubble.classList.remove('bounce');
+                $.requestFoodImg.classList.remove('bounce');
+            }, 300);
+            
             clearRequest();
         } else {
             score = CONFIG.SCORE_NORMAL;
@@ -543,6 +559,7 @@ function feedCharacter(icon) {
     game.score += score;
     updateScore();
     showEmotion(emotion);
+    showScorePopup(score);
     
     game.slots[slotIdx] = null;
     icon.remove();
@@ -557,8 +574,15 @@ function showEmotion(type) {
         showText(game.character.angryText, false);
     }
     
-    setTimeout(() => {
+    // 이전 타이머 취소
+    if (game.emotionTimer) {
+        clearTimeout(game.emotionTimer);
+    }
+    
+    // 새 타이머 시작
+    game.emotionTimer = setTimeout(() => {
         $.characterImg.src = game.character.normal;
+        game.emotionTimer = null;
     }, 2000);
 }
 
@@ -568,17 +592,44 @@ function showText(text, shake) {
     $.textContent.style.display = 'flex';
     $.textContent.textContent = display;
     
+    // 기존 shake 클래스 제거
+    $.textBubble.classList.remove('shake');
+    $.textContent.classList.remove('shake');
+    
     if (shake) {
+        // 리플로우 강제 (애니메이션 재시작)
+        void $.textBubble.offsetWidth;
         $.textBubble.classList.add('shake');
         $.textContent.classList.add('shake');
     }
     
-    setTimeout(() => {
+    // 이전 타이머 취소
+    if (game.textTimer) {
+        clearTimeout(game.textTimer);
+    }
+    
+    // 새 타이머 시작
+    game.textTimer = setTimeout(() => {
         $.textBubble.style.display = 'none';
         $.textContent.style.display = 'none';
         $.textBubble.classList.remove('shake');
         $.textContent.classList.remove('shake');
+        game.textTimer = null;
     }, 2000);
+}
+
+// ========== 점수 팝업 ==========
+function showScorePopup(score) {
+    const popup = document.createElement('div');
+    popup.className = 'score-popup';
+    popup.classList.add(score > 0 ? 'positive' : 'negative');
+    popup.textContent = score > 0 ? `+${score}` : `${score}`;
+    
+    $.gameContainer.appendChild(popup);
+    
+    setTimeout(() => {
+        popup.remove();
+    }, 1000);
 }
 
 // ========== 요청 시스템 ==========

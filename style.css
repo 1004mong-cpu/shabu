@@ -8,9 +8,6 @@ body {
     font-family: 'Malgun Gothic', sans-serif;
     overflow: hidden;
     background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     min-height: 100vh;
     user-select: none;
     -webkit-user-select: none;
@@ -19,16 +16,17 @@ body {
 #gameWrapper {
     width: 100vw;
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 #gameContainer {
     position: relative;
     width: 1080px;
     height: 1920px;
-    transform-origin: center center;
+    transform-origin: top left;
     overflow: hidden;
 }
 
@@ -78,17 +76,12 @@ body {
     z-index: 100;
 }
 
-.gauge-container {
+.gauge-green {
     position: absolute;
     left: 22px;
     top: 95px;
     z-index: 101;
-    overflow: hidden;
-}
-
-.gauge-green {
     display: block;
-    transition: none;
 }
 
 /* 일시정지 버튼 */
@@ -388,6 +381,43 @@ body {
     margin: 30px 0;
 }
 
+/* 점수 팝업 */
+.score-popup {
+    position: absolute;
+    left: 380px;
+    top: 304px;
+    width: 320px;
+    height: 72px;
+    font-size: 63pt;
+    font-weight: bold;
+    text-align: center;
+    line-height: 72px;
+    -webkit-text-stroke: 5px white;
+    text-stroke: 5px white;
+    z-index: 400;
+    pointer-events: none;
+    animation: scoreFloat 1s ease-out forwards;
+}
+
+.score-popup.positive {
+    color: #5aa700;
+}
+
+.score-popup.negative {
+    color: #ff4200;
+}
+
+@keyframes scoreFloat {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+}
+
 /* 애니메이션 */
 @keyframes shake {
     0%, 100% { transform: translateY(0); }
@@ -397,6 +427,15 @@ body {
 
 .shake {
     animation: shake 0.25s ease-in-out 4;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.bounce {
+    animation: bounce 0.3s ease-out;
 }
 
 @keyframes blink {

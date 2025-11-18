@@ -11,6 +11,8 @@ body {
     min-height: 100vh;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
 }
 
 #gameWrapper {
@@ -206,6 +208,8 @@ body {
     position: absolute;
     z-index: 500;
     pointer-events: none;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .food-icon.in-slot {
@@ -221,6 +225,8 @@ body {
 .food-icon.dragging {
     z-index: 600 !important;
     cursor: grabbing;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 /* Ready/Go */

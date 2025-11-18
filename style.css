@@ -76,11 +76,19 @@ body {
     z-index: 100;
 }
 
-.gauge-green {
+.gauge-wrapper {
     position: absolute;
     left: 22px;
     top: 95px;
+    overflow: hidden;
     z-index: 101;
+    height: 37px;  /* 실제 게이지 이미지 높이 */
+}
+
+.gauge-green {
+    position: relative;
+    left: 0;
+    top: 0;
     display: block;
 }
 

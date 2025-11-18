@@ -205,12 +205,16 @@ function startGameTimer() {
     gaugeImg.onload = () => {
         const fullWidth = gaugeImg.width;
         
+        // 초기 크기 설정 추가!
+        document.getElementById('gaugeWrapper').style.width = fullWidth + 'px';
+        document.getElementById('gaugeWrapper').style.height = gaugeImg.height + 'px';
+
         game.timers.game = setInterval(() => {
             if (game.isPaused) return;
             
             game.timeRemaining--;
             const percent = game.timeRemaining / CONFIG.GAME_TIME;
-            $.timeGauge.style.width = (fullWidth * percent) + 'px';
+            document.getElementById('gaugeWrapper').style.width = (fullWidth * percent) + 'px';
             
             if (game.timeRemaining <= 0) {
                 endGame();
